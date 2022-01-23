@@ -1,5 +1,5 @@
 var http = require("http");
-var operations = require("./operations");
+var {multiplicacion} = require("./utils/operations");
 
 var server = http
   .createServer(function (req, res) {
@@ -9,5 +9,4 @@ var server = http
   })
   .listen(3000);
 
-console.log("🚀 Suma:", operations.suma(1, 1));
-console.log("🚀 Multiplicación:", operations.multiplicacion(1, 2));
+console.log("🚀 Multiplicación:", multiplicacion(1, 2));
