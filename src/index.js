@@ -1,8 +1,8 @@
 var http = require("http");
-var {multiplicacion} = require("./utils/operations");
+var { multiplicacion } = require("./utils/operations");
 
 var server = http
-  .createServer(function (req, res) {
+  .createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "text/html" });
     res.write("Hello, world!");
     res.end();
