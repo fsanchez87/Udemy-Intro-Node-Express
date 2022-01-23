@@ -1,12 +1,14 @@
-var http = require("http");
-var { multiplicacion } = require("./utils/operations");
+const http = require("http");
+const { multiplicacion } = require("./utils/operations");
 
-var server = http
+const PORT = 3000;
+
+const server = http
   .createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "text/html" });
     res.write("Hello, world!");
     res.end();
   })
-  .listen(3000);
+  .listen(PORT);
 
 console.log("🚀 Multiplicación:", multiplicacion(1, 2));
