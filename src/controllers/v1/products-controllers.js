@@ -66,6 +66,18 @@ const getProducts = (req, res) => {
   });
 };
 
+const getProductById = (req, res) => {
+  const { productId } = req.params;
+  const index = products.findIndex((item) => item.id == productId);
+
+  if (index != -1) {
+    res.send({ data: products[index] });
+  } else {
+    res.status(404).send({});
+  }
+};
+
 module.exports = {
   getProducts,
+  getProductById
 };

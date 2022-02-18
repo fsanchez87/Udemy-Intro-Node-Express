@@ -5,6 +5,7 @@ const createRoutesV1 = (app) => {
   app.get("/api/v1/users", userController.getUsers);
   app.get("/api/v1/users/:userId", userController.getUserById);
   app.get("/api/v1/product", productController.getProducts);
+  app.get("/api/v1/product/:productId", productController.getProductById);
 };
 
 module.exports = createRoutesV1;
