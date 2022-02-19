@@ -91,8 +91,28 @@ const createProduct = (req, res) => {
   res.send(newProduct);
 };
 
+const updateProduct = (req, res) => {
+  const id = parseInt(req.params.productId);
+  const { name, year, color, pantone_value } = req.body;
+  const index = products.findIndex((item) => item.id == id);
+
+  if (index != -1) {
+    products[index] = {
+      id,
+      name,
+      year,
+      color,
+      pantone_value,
+    };
+    res.send({ data: products[index] });
+  } else {
+    res.status(400).send({});
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
+  updateProduct,
 };
