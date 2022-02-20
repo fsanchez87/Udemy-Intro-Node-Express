@@ -149,9 +149,21 @@ const updateProductAndNotify = (req, res) => {
       pantone_value: pantone_value || product.pantone_value,
     };
 
-    res.send({ data: products[index], message: `Email sent to ${client }` });
+    res.send({ data: products[index], message: `Email sent to ${client}` });
   } else {
     res.status(400).send({});
+  }
+};
+
+const deleteProductById = (req, res) => {
+  const productId = parseInt(req.params.productId);
+  const index = products.findIndex((item) => item.id === productId);
+
+  if (index != -1) {
+    products.splice(index, 1);
+    res.send({});
+  } else {
+    res.status(404).send({});
   }
 };
 
@@ -162,4 +174,5 @@ module.exports = {
   updateProduct,
   partialUpdateProduct,
   updateProductAndNotify,
+  deleteProductById,
 };
