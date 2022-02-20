@@ -110,9 +110,56 @@ const updateProduct = (req, res) => {
   }
 };
 
+const partialUpdateProduct = (req, res) => {
+  const productId = parseInt(req.params.productId);
+  const { id, name, year, color, pantone_value } = req.body;
+  const index = products.findIndex((item) => item.id == productId);
+
+  if (index != -1) {
+    const product = products[index];
+
+    products[index] = {
+      id: id || product.id,
+      name: name || product.name,
+      year: year || product.year,
+      color: color || product.color,
+      pantone_value: pantone_value || product.pantone_value,
+    };
+
+    res.send({ data: products[index] });
+  } else {
+    res.status(400).send({});
+  }
+};
+
+const updateProductAndNotify = (req, res) => {
+  const productId = parseInt(req.params.productId);
+  const { client, data } = req.body;
+  const { id, name, year, color, pantone_value } = data;
+  const index = products.findIndex((item) => item.id == productId);
+
+  if (index != -1) {
+    const product = products[index];
+
+    products[index] = {
+      id: id || product.id,
+      name: name || product.name,
+      year: year || product.year,
+      color: color || product.color,
+      pantone_value: pantone_value || product.pantone_value,
+    };
+
+    res.send({ data: products[index], message: `Email sent to ${client }` });
+  } else {
+    res.status(400).send({});
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
+  partialUpdateProduct,
+  updateProductAndNotify,
 };
