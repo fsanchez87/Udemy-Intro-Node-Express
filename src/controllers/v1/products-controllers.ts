@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import { products, Product } from '../../data/products';
 
-const getProducts = (req: Request, res: Response): void => {
+export const getProducts = (req: Request, res: Response): void => {
   const itemsPerPage: number = 6;
   const page: number = parseInt(req.query.page as string);
   const start = (page - 1) * itemsPerPage;
@@ -18,7 +18,7 @@ const getProducts = (req: Request, res: Response): void => {
   });
 };
 
-const getProductById = (req: Request, res: Response): void => {
+export const getProductById = (req: Request, res: Response): void => {
   const { productId } = req.params;
   const index: number = products.findIndex(
     (item) => item.id === parseInt(productId)
@@ -31,7 +31,7 @@ const getProductById = (req: Request, res: Response): void => {
   }
 };
 
-const createProduct = (req: Request, res: Response): void => {
+export const createProduct = (req: Request, res: Response): void => {
   const { name, year, color, pantone_value }: Product = req.body;
   const newProduct: Product = {
     id: products.length + 1,
@@ -45,7 +45,7 @@ const createProduct = (req: Request, res: Response): void => {
   res.send(newProduct);
 };
 
-const updateProduct = (req: Request, res: Response): void => {
+export const updateProduct = (req: Request, res: Response): void => {
   const id: number = parseInt(req.params.productId);
   const { name, year, color, pantone_value }: Product = req.body;
   const index: number = products.findIndex((item) => item.id === id);
@@ -64,7 +64,7 @@ const updateProduct = (req: Request, res: Response): void => {
   }
 };
 
-const partialUpdateProduct = (req: Request, res: Response): void => {
+export const partialUpdateProduct = (req: Request, res: Response): void => {
   const productId: number = parseInt(req.params.productId);
   const { id, name, year, color, pantone_value }: Product = req.body;
   const index: number = products.findIndex((item) => item.id === productId);
@@ -86,7 +86,7 @@ const partialUpdateProduct = (req: Request, res: Response): void => {
   }
 };
 
-const updateProductAndNotify = (req: Request, res: Response): void => {
+export const updateProductAndNotify = (req: Request, res: Response): void => {
   const productId: number = parseInt(req.params.productId);
   const { client, data } = req.body;
   const { id, name, year, color, pantone_value }: Product = data;
@@ -109,7 +109,7 @@ const updateProductAndNotify = (req: Request, res: Response): void => {
   }
 };
 
-const deleteProductById = (req: Request, res: Response): void => {
+export const deleteProductById = (req: Request, res: Response): void => {
   const productId: number = parseInt(req.params.productId);
   const index: number = products.findIndex((item) => item.id === productId);
 
@@ -121,12 +121,3 @@ const deleteProductById = (req: Request, res: Response): void => {
   }
 };
 
-exports = {
-  getProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  partialUpdateProduct,
-  updateProductAndNotify,
-  deleteProductById,
-};
