@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import mongoose from 'mongoose';
 
 const connection = async (): Promise<boolean> => {
   try {
     await mongoose.connect(
-      'mongodb+srv://userMongo:MmM0NG0@cluster0.cvr5a.mongodb.net/hello_world?retryWrites=true&w=majority'
+      process.env.MONGO_URI!
     );
     return true;
   } catch (error) {
