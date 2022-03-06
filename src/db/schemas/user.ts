@@ -1,12 +1,21 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
+
+interface User extends Document {
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
+  password: string;
+}
 
 const schema = new Schema({
-  email: String,
-  first_name: String,
-  last_name: String,
+  email: { type: String, unique: true, required: true },
+  first_name: { type: String, required: true },
+  last_name: { type: String, required: true },
   avatar: String,
+  password: { type: String, required: true },
 });
 
-const Users = model('user', schema);
+const Users = model<User>('user', schema);
 
 export default Users;

@@ -13,11 +13,18 @@ export const getUserById = async (
 ): Promise<void> => {
   const { userId } = req.params;
 
-  const user = await Users.find({ userId });
+  const user = await Users.findById({ userId });
 
   if (user) {
     res.send(user);
   } else {
     res.status(404).send({});
   }
+};
+
+const createUser = async (req: Request, res: Response): Promise<void> => {
+  const { email, first_name, last_name, avatar,password } = req.body;
+  const newUser = await Users.create({ email, first_name, last_name, avatar });
+
+  res.send(newUser);
 };
