@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 
 import Users from '../../db/schemas/user';
 
@@ -22,9 +23,23 @@ export const getUserById = async (
   }
 };
 
-const createUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, first_name, last_name, avatar,password } = req.body;
-  const newUser = await Users.create({ email, first_name, last_name, avatar });
+export const createUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { email, first_name, last_name, avatar, password } = req.body;
+    const hash: string = await bcrypt.hash(password, 15);
+    const newUser = await Users.create({
+      email,
+      first_name,
+      last_name,
+      avatar,
+      password: hash,
+    });
 
-  res.send(newUser);
+    res.send(newUser);
+  } catch (e: any) {
+    res.status(500).send(e.message);
+  }
 };
