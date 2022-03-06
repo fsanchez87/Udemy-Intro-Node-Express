@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import Users from '../../db/schemas/user';
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
-  const users = await Users.find();
+  const users = await Users.find().select({ password: 0, __v: 0 });
   res.send(users);
 };
 
@@ -14,7 +14,7 @@ export const getUserById = async (
 ): Promise<void> => {
   const { userId } = req.params;
 
-  const user = await Users.findById(userId);
+  const user = await Users.findById(userId).select({ password: 0, __v: 0 });
 
   if (user) {
     res.send(user);
@@ -39,7 +39,7 @@ export const createUser = async (
     });
 
     res.send(newUser);
-  } catch (e: any) {    
+  } catch (e: any) {
     res.status(500).send(e.message);
   }
 };
