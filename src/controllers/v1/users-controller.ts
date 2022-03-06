@@ -14,7 +14,7 @@ export const getUserById = async (
 ): Promise<void> => {
   const { userId } = req.params;
 
-  const user = await Users.findById({ userId });
+  const user = await Users.findById(userId);
 
   if (user) {
     res.send(user);
@@ -39,7 +39,7 @@ export const createUser = async (
     });
 
     res.send(newUser);
-  } catch (e: any) {
+  } catch (e: any) {    
     res.status(500).send(e.message);
   }
 };
