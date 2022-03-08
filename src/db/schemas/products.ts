@@ -15,7 +15,7 @@ const schema = new Schema({
   year: { type: Number, required: true },
   price: { type: Number, default: 0 },
   description: String,
-  user: {type: Schema.Types.ObjectId, ref: 'user'}
+  user: {type: Schema.Types.ObjectId, ref: 'user', required: true}
 });
 
 const Products = model<Product>('product', schema);
