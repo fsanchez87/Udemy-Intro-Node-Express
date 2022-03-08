@@ -7,7 +7,7 @@ const createRoutesV1 = (app: Application):void => {
   app.get("/api/v1/users", userController.getUsers);
   app.post("/api/v1/users/create", userController.createUser);
   app.get("/api/v1/users/:userId", userController.getUserById);
-  // app.get("/api/v1/products", productController.getProducts);
+  app.get("/api/v1/products", productController.getProducts);
   // app.get("/api/v1/products/:productId", productController.getProductById);
   app.post("/api/v1/products/create", productController.createProduct);
   // app.put("/api/v1/products/products/:productId", productController.updateProduct);

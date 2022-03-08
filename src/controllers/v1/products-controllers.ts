@@ -2,21 +2,22 @@ import { Request, Response } from 'express';
 
 import Products from '../../db/schemas/products';
 
-// export const getProducts = (req: Request, res: Response): void => {
-//   const itemsPerPage: number = 6;
-//   const page: number = parseInt(req.query.page as string);
-//   const start = (page - 1) * itemsPerPage;
-//   const total: number = products.length;
-//   const end: number = page * itemsPerPage;
+export const getProducts = async (req: Request, res: Response): Promise<void> => {
+  const itemsPerPage: number = 6;
+  const page: number = parseInt(req.query.page as string);
+  const start = (page - 1) * itemsPerPage;
+  const total: number = await Products.count();
 
-//   res.send({
-//     page: page,
-//     per_page: itemsPerPage,
-//     total: total,
-//     total_pages: Math.ceil(total / itemsPerPage),
-//     data: products.slice(start, end),
-//   });
-// };
+  const products = await Products.find().skip(start).limit(itemsPerPage)
+
+  res.send({
+    page: page,
+    per_page: itemsPerPage,
+    total: total,
+    total_pages: Math.ceil(total / itemsPerPage),
+    data: products,
+  });
+};
 
 // export const getProductById = (req: Request, res: Response): void => {
 //   const { productId } = req.params;
