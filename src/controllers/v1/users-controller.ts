@@ -32,22 +32,20 @@ export const deleteById = async (
   try {
     const { userId } = req.params;
     validatObjectId(userId);
-    const user = await Users.findByIdAndDelete(userId )
+    const user = await Users.findByIdAndDelete(userId);
 
     if (user) {
-      await Products.deleteMany({ 
-         user: user._id,
+      await Products.deleteMany({
+        user: user._id,
       });
-      res.send('ok')
-    }else {
-      res.status(404).send({})
+      res.send('ok');
+    } else {
+      res.status(404).send({});
     }
-
   } catch (e: any) {
     sendError(res, e);
   }
 };
-
 
 export const createUser = async (
   req: Request,
@@ -67,5 +65,27 @@ export const createUser = async (
     res.send(newUser);
   } catch (e: any) {
     res.status(500).send(e.message);
+  }
+};
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      throw { code: 404, message: 'User not found' };
+    }
+    const loginOk: boolean = await bcrypt.compare(password, user.password);
+
+    if (!loginOk) {
+      throw { code: 401, message: 'Invalid Password' };
+    }
+    res.send({
+      token: 'qwertyuiop',
+      expiresIn: 600,
+    });
+  } catch (e) {
+    sendError(res, e);
   }
 };
