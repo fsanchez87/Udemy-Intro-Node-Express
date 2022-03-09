@@ -1,19 +1,12 @@
-import {Application} from 'express';
+import { Application } from 'express';
 
-import * as userController from '../../controllers/v1/users-controller';
-import * as productController from '../../controllers/v1/products-controllers';
+import userRouter from './user-router';
+import productRouter from './product-router';
 
-const createRoutesV1 = (app: Application):void => {
-  app.get("/api/v1/users", userController.getUsers);
-  app.post("/api/v1/users/create", userController.createUser);
-  app.get("/api/v1/users/:userId", userController.getUserById);
-  app.delete("/api/v1/users/:userId", userController.deleteById);
-  app.get("/api/v1/products", productController.getProducts);
-  app.get("/api/v1/products/:productId", productController.getProductById);
-  app.post("/api/v1/products/create", productController.createProduct);
-  app.put("/api/v1/products/products/:productId", productController.updateProduct);
-  app.delete("/api/v1/products/products/:productId", productController.deleteProductById);
-  app.patch("/api/v1/products/products/:productId", productController.partialUpdateProduct);
+const createRoutesV1 = (app: Application): void => {
+  app.use('/api/v1/users', userRouter);
+  app.use('/api/v1/products', productRouter);
+
 };
 
 export default createRoutesV1;
