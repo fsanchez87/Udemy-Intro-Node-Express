@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Types } from 'mongoose'
 
 import Products from '../../db/schemas/products';
 
@@ -103,37 +104,13 @@ export const partialUpdateProduct = async (
   }
 };
 
-// export const updateProductAndNotify = (req: Request, res: Response): void => {
-//   const productId: number = parseInt(req.params.productId);
-//   const { client, data } = req.body;
-//   const { id, name, year, color, pantone_value }: Product = data;
-//   const index: number = products.findIndex((item) => item.id === productId);
+export const deleteProductById = async (req: Request, res: Response): Promise<void> => {
+  const productId: string = req.params.productId;
+  const deleted = await Products.deleteOne({productId});
 
-//   if (index != -1) {
-//     const product = products[index];
-
-//     products[index] = {
-//       id: id || product.id,
-//       name: name || product.name,
-//       year: year || product.year,
-//       color: color || product.color,
-//       pantone_value: pantone_value || product.pantone_value,
-//     };
-
-//     res.send({ data: products[index], message: `Email sent to ${client}` });
-//   } else {
-//     res.status(400).send({});
-//   }
-// };
-
-// export const deleteProductById = (req: Request, res: Response): void => {
-//   const productId: number = parseInt(req.params.productId);
-//   const index: number = products.findIndex((item) => item.id === productId);
-
-//   if (index != -1) {
-//     products.splice(index, 1);
-//     res.send({});
-//   } else {
-//     res.status(404).send({});
-//   }
-// };
+  if (deleted.deletedCount > 0) {
+    res.send({});
+  } else {
+    res.status(404).send({});
+  }
+};
