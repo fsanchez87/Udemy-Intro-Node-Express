@@ -8,7 +8,7 @@ export const getProducts = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const itemsPerPage: number = 6;
+  const itemsPerPage: number = 20;
   const page: number = parseInt(req.query.page as string);
   const start = (page - 1) * itemsPerPage;
   const total: number = await Products.count();
