@@ -12,7 +12,7 @@ const createRoutesV1 = (app: Application):void => {
   app.post("/api/v1/products/create", productController.createProduct);
   app.put("/api/v1/products/products/:productId", productController.updateProduct);
   // app.delete("/api/v1/products/products/:productId", productController.deleteProductById);
-  // app.patch("/api/v1/products/products/:productId", productController.partialUpdateProduct);
+  app.patch("/api/v1/products/products/:productId", productController.partialUpdateProduct);
   // app.post("/api/v1/products/products/:productId/notify-client", productController.updateProductAndNotify);
 };
 

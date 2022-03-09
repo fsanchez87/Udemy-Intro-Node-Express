@@ -63,45 +63,45 @@ export const updateProduct = async (
   res: Response
 ): Promise<void> => {
   const id: string = req.params.productId;
-  const { name, year, color, price, description, user } = req.body;
+  const { name, year, price, description, user } = req.body;
 
   const updateProduct = await Products.findByIdAndUpdate(id, {
     name,
     year,
-    color,
     price,
     description,
     user,
   });
 
   if (updateProduct) {
-    res.send({ data: "Update ok" });
+    res.send({ data: 'Update ok' });
   } else {
     res.status(400).send({});
   }
 };
 
-// export const partialUpdateProduct = (req: Request, res: Response): void => {
-//   const productId: number = parseInt(req.params.productId);
-//   const { id, name, year, color, pantone_value }: Product = req.body;
-//   const index: number = products.findIndex((item) => item.id === productId);
+export const partialUpdateProduct = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const productId: string = req.params.productId;
+  const { name, year, price, description, user } = req.body;
 
-//   if (index != -1) {
-//     const product = products[index];
+  const product = await Products.findById(productId);
 
-//     products[index] = {
-//       id: id || product.id,
-//       name: name || product.name,
-//       year: year || product.year,
-//       color: color || product.color,
-//       pantone_value: pantone_value || product.pantone_value,
-//     };
+  if (product) {
+    product.name = name || product.name;
+    product.year = year || product.year;
+    product.price = price || product.price;
+    product.description = description || product.description;
+    product.user = user || product.user;
+    await product.save();
 
-//     res.send({ data: products[index] });
-//   } else {
-//     res.status(400).send({});
-//   }
-// };
+    res.send({ data: product });
+  } else {
+    res.status(400).send({});
+  }
+};
 
 // export const updateProductAndNotify = (req: Request, res: Response): void => {
 //   const productId: number = parseInt(req.params.productId);
