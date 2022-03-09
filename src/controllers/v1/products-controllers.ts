@@ -2,13 +2,16 @@ import { Request, Response } from 'express';
 
 import Products from '../../db/schemas/products';
 
-export const getProducts = async (req: Request, res: Response): Promise<void> => {
+export const getProducts = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const itemsPerPage: number = 6;
   const page: number = parseInt(req.query.page as string);
   const start = (page - 1) * itemsPerPage;
   const total: number = await Products.count();
 
-  const products = await Products.find().skip(start).limit(itemsPerPage)
+  const products = await Products.find().skip(start).limit(itemsPerPage);
 
   res.send({
     page: page,
@@ -19,18 +22,20 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
   });
 };
 
-// export const getProductById = (req: Request, res: Response): void => {
-//   const { productId } = req.params;
-//   const index: number = products.findIndex(
-//     (item) => item.id === parseInt(productId)
-//   );
+export const getProductById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { productId } = req.params;
 
-//   if (index != -1) {
-//     res.send({ data: products[index] });
-//   } else {
-//     res.status(404).send({});
-//   }
-// };
+  const product = await Products.findById(productId);
+
+  if (product) {
+    res.send(product);
+  } else {
+    res.status(404).send({});
+  }
+};
 
 export const createProduct = async (
   req: Request,
@@ -53,24 +58,28 @@ export const createProduct = async (
   }
 };
 
-// export const updateProduct = (req: Request, res: Response): void => {
-//   const id: number = parseInt(req.params.productId);
-//   const { name, year, color, pantone_value }: Product = req.body;
-//   const index: number = products.findIndex((item) => item.id === id);
+export const updateProduct = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const id: string = req.params.productId;
+  const { name, year, color, price, description, user } = req.body;
 
-//   if (index != -1) {
-//     products[index] = {
-//       id,
-//       name,
-//       year,
-//       color,
-//       pantone_value,
-//     };
-//     res.send({ data: products[index] });
-//   } else {
-//     res.status(400).send({});
-//   }
-// };
+  const updateProduct = await Products.findByIdAndUpdate(id, {
+    name,
+    year,
+    color,
+    price,
+    description,
+    user,
+  });
+
+  if (updateProduct) {
+    res.send({ data: "Update ok" });
+  } else {
+    res.status(400).send({});
+  }
+};
 
 // export const partialUpdateProduct = (req: Request, res: Response): void => {
 //   const productId: number = parseInt(req.params.productId);

@@ -8,9 +8,9 @@ const createRoutesV1 = (app: Application):void => {
   app.post("/api/v1/users/create", userController.createUser);
   app.get("/api/v1/users/:userId", userController.getUserById);
   app.get("/api/v1/products", productController.getProducts);
-  // app.get("/api/v1/products/:productId", productController.getProductById);
+  app.get("/api/v1/products/:productId", productController.getProductById);
   app.post("/api/v1/products/create", productController.createProduct);
-  // app.put("/api/v1/products/products/:productId", productController.updateProduct);
+  app.put("/api/v1/products/products/:productId", productController.updateProduct);
   // app.delete("/api/v1/products/products/:productId", productController.deleteProductById);
   // app.patch("/api/v1/products/products/:productId", productController.partialUpdateProduct);
   // app.post("/api/v1/products/products/:productId/notify-client", productController.updateProductAndNotify);
