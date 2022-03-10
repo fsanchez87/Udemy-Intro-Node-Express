@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import Users from '../../db/schemas/user';
 import Products from '../../db/schemas/products';
@@ -81,9 +82,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     if (!loginOk) {
       throw { code: 401, message: 'Invalid Password' };
     }
+
+    const expiresIn = 60 * 60;
+
+    const token: string = jwt.sign(
+      {
+        userId: user.id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn,
+      }
+    );
+
     res.send({
-      token: 'qwertyuiop',
-      expiresIn: 600,
+      token,
+      expiresIn,
     });
   } catch (e) {
     sendError(res, e);
