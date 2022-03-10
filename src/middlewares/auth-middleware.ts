@@ -16,8 +16,19 @@ export const checkAuth = (
 
     jwt.verify(token as string, process.env.JWT_SECRET!);
     next();
-
   } catch (e: any) {
     res.status(401).send(e.message);
+  }
+};
+
+export const checkIP = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  if (req.hostname === 'localhost') {
+    next();
+  } else {
+    res.status(403).send('Access denied');
   }
 };
