@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { Types } from 'mongoose';
 
 import Products from '../../db/schemas/products';
 import { sendError, validatObjectId } from '../../utils/response_utils';
@@ -11,9 +10,13 @@ export const getProducts = async (
   const itemsPerPage: number = 20;
   const page: number = parseInt(req.query.page as string);
   const start = (page - 1) * itemsPerPage;
-  const total: number = await Products.count();
+  const total: number = await Products.count({ user: req.session.userId });
 
-  const products = await Products.find().skip(start).limit(itemsPerPage);
+  const products = await Products.find({
+    user: req.session.userId,
+  })
+    .skip(start)
+    .limit(itemsPerPage);
 
   res.send({
     page: page,
@@ -32,7 +35,10 @@ export const getProductById = async (
     const { productId } = req.params;
     validatObjectId(productId);
 
-    const product = await Products.findById(productId).populate({
+    const product = await Products.findOne({
+      _id: productId,
+      user: req.session.userId,
+    }).populate({
       path: 'user',
       select: {
         password: 0,
@@ -55,8 +61,9 @@ export const createProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { name, year, color, price, description, user } = req.body;
-    validatObjectId(user);
+    const { userId } = req.session;
+    const { name, year, color, price, description } = req.body;
+    validatObjectId(userId);
 
     const newProduct = await Products.create({
       name,
@@ -64,7 +71,7 @@ export const createProduct = async (
       color,
       price,
       description,
-      user,
+      user: userId,
     });
 
     res.send(newProduct);
@@ -80,14 +87,20 @@ export const updateProduct = async (
   try {
     const id: string = req.params.productId;
     validatObjectId(id);
-    const { name, year, price, description, user } = req.body;
-    const updateProduct = await Products.findByIdAndUpdate(id, {
-      name,
-      year,
-      price,
-      description,
-      user,
-    });
+    const { name, year, price, description } = req.body;
+    const updateProduct = await Products.findOneAndUpdate(
+      {
+        _id: id,
+        userId: req.session.userId,
+      },
+      {
+        name,
+        year,
+        price,
+        description,
+        user: req.session.userId,
+      }
+    );
 
     if (updateProduct) {
       res.send({ data: 'Update ok' });
@@ -106,16 +119,18 @@ export const partialUpdateProduct = async (
   try {
     const productId: string = req.params.productId;
     validatObjectId(productId);
-    const { name, year, price, description, user } = req.body;
+    const { name, year, price, description } = req.body;
 
-    const product = await Products.findById(productId);
+    const product = await Products.findOne({
+      _id: productId,
+      userId: req.session.userId,
+    });
 
     if (product) {
       product.name = name || product.name;
       product.year = year || product.year;
       product.price = price || product.price;
       product.description = description || product.description;
-      product.user = user || product.user;
       await product.save();
 
       res.send({ data: product });
@@ -136,7 +151,10 @@ export const deleteProductById = async (
 
     validatObjectId(productId);
 
-    const deleted = await Products.deleteOne({ productId });
+    const deleted = await Products.deleteOne({
+      _id: productId,
+      userId: req.session.userId,
+    });
 
     if (deleted.deletedCount > 0) {
       res.send({});

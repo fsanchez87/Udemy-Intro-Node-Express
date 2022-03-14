@@ -5,7 +5,7 @@ import { checkAuth, checkIP } from '../../middlewares/auth-middleware';
 
 const routes = Router();
 
-routes.get('/', checkIP, checkAuth, productController.getProducts);
+routes.get('/', checkAuth, productController.getProducts);
 routes.get('/:productId', checkAuth, productController.getProductById);
 routes.post('/create', checkAuth, productController.createProduct);
 routes.put('/products/:productId', checkAuth, productController.updateProduct);
