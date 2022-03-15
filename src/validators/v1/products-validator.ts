@@ -1,7 +1,7 @@
-import { checkSchema } from 'express-validator';
+import { checkSchema, Schema, ParamSchema } from 'express-validator';
 
-export const validateNewProductBody = checkSchema({
-  name: {
+const createProductSchema = (isStrict: boolean): Schema => {
+  const nameSchema: ParamSchema = {
     isString: true,
     rtrim: {
       options: ' ',
@@ -12,15 +12,17 @@ export const validateNewProductBody = checkSchema({
       },
     },
     errorMessage: ' Name must be a valid string with at least 2 characters',
-  },
-  year: {
+  };
+
+  const yearSchema: ParamSchema = {
     isInt: true,
     isString: {
       negated: true,
     },
     errorMessage: 'Year must be an integer',
-  },
-  price: {
+  };
+
+  const priceSchema: ParamSchema = {
     isNumeric: true,
     isString: {
       negated: true,
@@ -31,5 +33,31 @@ export const validateNewProductBody = checkSchema({
       },
     },
     errorMessage: 'Price must be an numeric > 0',
+  };
+
+  if (!isStrict) {
+    const optional = {
+      options: {
+        nullable: true,
+      },
+    };
+    nameSchema.optional = optional;
+    yearSchema.optional = optional;
+    priceSchema.optional = optional;
+  }
+
+  return {
+    name: nameSchema,
+    year: yearSchema,
+    price: priceSchema,
+  };
+};
+
+export const validateNewProductBody = checkSchema(createProductSchema(true));
+
+export const validateDelete = checkSchema({
+  productId: {
+    in: 'params',
+    isMongoId: true,
   },
 });

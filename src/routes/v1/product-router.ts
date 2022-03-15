@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as productController from '../../controllers/v1/products-controllers';
 import { checkAuth } from '../../middlewares/auth-middleware';
 import { handleReqErrors } from '../../middlewares/validator_middleware';
-import { validateNewProductBody } from '../../validators/v1/products-validator';
+import { validateDelete, validateNewProductBody } from '../../validators/v1/products-validator';
 
 const routes = Router();
 
@@ -17,8 +17,10 @@ routes.post(
 );
 routes.put('/products/:productId', checkAuth, productController.updateProduct);
 routes.delete(
-  '/products/:productId',
+  '/:productId',
   checkAuth,
+  validateDelete,
+  handleReqErrors,  
   productController.deleteProductById
 );
 routes.patch(

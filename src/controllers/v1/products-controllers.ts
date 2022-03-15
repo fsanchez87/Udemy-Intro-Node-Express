@@ -149,7 +149,7 @@ export const deleteProductById = async (
   try {
     const productId: string = req.params.productId;
 
-    validatObjectId(productId);
+    // validatObjectId(productId);
 
     const deleted = await Products.deleteOne({
       _id: productId,
