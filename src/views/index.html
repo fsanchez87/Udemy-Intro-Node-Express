@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udemy Node</title>
+</head>
+
+<body>
+    <form id="login-form" method="post" action="http://localhost:3000/api/v1/users/login">
+
+        <button type="submit">SEND</button>
+    </form>
+
+    <script>
+        var formElement = document.getElementById("login-form");
+        formElement.addEventListener("submit", function (event) {
+            event.preventDefault();
+            var request = new XMLHttpRequest();
+            request.open("POST", "http://localhost:3000/api/v1/users/login");
+            request.setRequestHeader("Content-Type", "application/json")
+            request.onload = function (_) {
+                if (request.status === 200) {
+                    console.log(request.responseText);
+                } else {
+                    console.log(request.status)
+                }
+            }
+            request.send(JSON.stringify({
+                email: "seeis@gmail.com",
+                password: "12345"
+            }));
+        })
+
+    </script>
+</body>
+
+</html>

@@ -71,6 +71,7 @@ export const createUser = async (
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log(req.body)
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
 
